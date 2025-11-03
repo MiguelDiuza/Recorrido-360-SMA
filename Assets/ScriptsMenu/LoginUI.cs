@@ -40,7 +40,7 @@ public class LoginUI : MonoBehaviour
                 mensajeError.gameObject.SetActive(false);
 
             // Cambiar a la escena inicial
-            SceneManager.LoadScene("EscenaInicial");
+            SceneManager.LoadScene("menu2");
         }
         else
         {
