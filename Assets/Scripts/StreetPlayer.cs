@@ -68,20 +68,25 @@ public class StreetPlayer : MonoBehaviour
         Vector3 startCamPos = cameraPivot.localPosition;
         Vector3 camOffset = new Vector3(0f, 0f, cameraMoveOffset);
 
-        while (Vector3.Distance(transform.position, dest) > stopDistance)
+        // ✅ Aumenta la distancia mínima para móvil
+        float minStop = stopDistance < 0.08f ? 0.1f : stopDistance;
+
+        while (Vector3.Distance(transform.position, dest) > minStop)
         {
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, rotateSpeed * Time.deltaTime);
             Vector3 dir = (dest - transform.position).normalized;
             cc.Move(dir * moveSpeed * Time.deltaTime);
 
-            cameraPivot.localPosition = Vector3.Lerp(cameraPivot.localPosition, startCamPos + camOffset, 0.05f);
-
+            cameraPivot.localPosition = Vector3.Lerp(cameraPivot.localPosition, startCamPos + camOffset, 0.08f);
             yield return null;
         }
 
-        // Ajuste final
+        // ✅ Ajuste final SEGURO en móvil
+        cc.enabled = false;                        // <-- ADICIÓN
         transform.position = dest;
         transform.rotation = targetRot;
+        cc.enabled = true;                         // <-- ADICIÓN
+
         cameraPivot.localPosition = startCamPos;
         current = target;
         movingRoutine = null;
